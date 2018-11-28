@@ -1,14 +1,13 @@
 import time
-import pandas as pd
 import math
-
+import pandas as pd
 
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
 
 cities = ['chicago', 'new york city', 'washington']
-months = ['january', 'february', 'march', 'april', 'may', 'june', 'july','all']
+months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'all']
 days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'all']
 
 def get_filters():
@@ -27,7 +26,7 @@ def get_filters():
         city = input('Please select your city from: \n-washington \n-chicago \n-new york city \n' ).lower()
         city = city.lower()
         if city in cities:
-            print('You have selected {}'.format(city))
+            print('You have selected: \n {}'.format(city))
             break
         else:
             print('Sorry, that is not a valid city. Please try again')
@@ -41,9 +40,9 @@ def get_filters():
     # get user input for month (all, january, february, ... , june)
 
     while True:
-        month = input('Please select month to filter by: ').lower()
+        month = input('Please select month to filter by: \n').lower()
         if month in months:
-            print('You have selected {}'.format(month))
+            print('You have selected: \n {}'.format(month))
             break
         else:
             print('Your selection is not valid. Please try again and remember to check spelling')
@@ -56,9 +55,9 @@ def get_filters():
 
     # get user input for day of week (all, monday, tuesday, ... sunday)
     while True:
-        day = input('Please select the day you want to filter. If you want no filter, please enter "all"').lower()
+        day = input('Please select the day you want to filter. \nIf you want no filter, please enter "all" \n').lower()
         if day in days:
-            print('You have selected {}'.format(day))
+            print('You have selected \n {}'.format(day))
             break
         else:
             print('Please try again')
@@ -89,8 +88,8 @@ def load_data(city, month, day):
     df['day_of_week'] = df['Start Time'].dt.weekday_name
 
     if month != 'all':
-        months = ['january', 'february', 'march', 'april', 'may', 'june']
-        month = months.index(month) +1
+        month_select = ['january', 'february', 'march', 'april', 'may', 'june']
+        month = month_select.index(month) +1
         df = df[df['month'] == month]
 
     if day != 'all':
@@ -99,7 +98,7 @@ def load_data(city, month, day):
 
 def selectstats(df):
     while True:
-        filter_stats = input('How would you like to filter:\n 1 - Time Stats\n 2 - User Stats\n 3 - Station Stats\n 4 - All Stats\n' )
+        filter_stats = input('How would you like to filter:\n 1 - Time Stats\n 2 - User Stats\n 3 - Station Stats\n 4 - Trip Duration Stats \n 5 - All Stats\n' )
         #for stat in filter_stats:
         if filter_stats == '1':
             return time_stats(df)
@@ -108,8 +107,10 @@ def selectstats(df):
         if filter_stats == '3':
             return station_stats(df)
         if filter_stats == '4':
+            return trip_duration_stats(df)
+        if filter_stats == '5':
             return time_stats(df), user_stats(df), station_stats(df)
-        if filter_stats != '1' or '2' or '3' or '4':
+        if filter_stats != '1' or '2' or '3' or '4' or '5':
             print('That is not a valid input. Please try again')
 
 
@@ -150,7 +151,7 @@ def time_stats(df):
 
     common_hour = df['Start Time'].dt.hour.mode()[0]
 
-    print('The most common start hour is {}:00 hours'.format(common_hour))
+    print('The most common start hour is {}:00 hours\n'.format(common_hour))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -176,7 +177,7 @@ def station_stats(df):
     df["combined"] = df["Start Station"] + " - "+ df["End Station"]
     common_combined = df["combined"].mode()[0]
 
-    print('The most frequent occurence of a start and end station group is {}'.format(common_combined))
+    print('The most frequent occurence of a start and end station group is \n {}'.format(common_combined))
     print()
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -189,17 +190,43 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     # display total travel time
+
+    total_trip = df['Trip Duration'].sum()
+
+    minutes = int(math.floor(total_trip / 60))
+    hours = int(math.floor(total_trip / 3600))
+    days_calc = int(math.floor(total_trip / 86400))
+    years = int(math.floor(total_trip / 31536000))
+    print('Trip Duration breakdown is as follows:\n')
+    print('Minutes {}:'.format(minutes))
+    print('Hours {}:'.format(hours))
+    print('Days {}:'.format(days_calc))
+    print('Years {}:'.format(years))
+
+    def TimeConvert(num):
+        hours = int(math.floor(num / 3600))
+        minutes = num % 60
+
+      # combine the hours and minutes
+
+        return str(hours) + ':' + str(minutes)
+    print('The total trip was:')
+    print(TimeConvert(total_trip))
+
+
+    '''
     total_trip = df['Trip Duration'].sum()
     hours = int(math.floor(total_trip / 3600))
     minutes = int(math.floor(total_trip % 60))
-    '''
+
+    print('The total trip travel time has been: \n {} hours and {} minutes:'.format(hours, minutes))
+    print()
+
     calculates the sum of time per city as total seconds
     divides the seconds by 3600 to get hours
     returns the remainder of the seconds in minutes using the modulo function
     an alternate for hours could be integer division
     '''
-    print('There has been a total trip time of {} hours and {} minutes of travel time'.format(hours, minutes))
-    print()
 
     # display mean travel time
     mean_trip = df["Trip Duration"].mean()
@@ -211,19 +238,20 @@ def trip_duration_stats(df):
     returns the remainder of the seconds in seconds using the modulo function
     an alternate for minutes could be using the math.floor function
     '''
-    print('The mean travel time was {} minutes and {} seconds'.format(mean_trip_minutes, mean_trip_seconds))
+    print('The mean travel time is: \n {} minutes and {} seconds'.format(mean_trip_minutes, mean_trip_seconds))
     print()
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
 
 def user_stats(df):
-    """Displays statistics on bikeshare users."""
+    """
+    Displays statistics on bikeshare users.
+    """
 
     print('\nCalculating User Stats...\n')
     start_time = time.time()
 
-    # Display counts of user types
     try:
         users = df['User Type']
         subscriber_count = 0
@@ -239,19 +267,19 @@ def user_stats(df):
                 unkown_count += 1
         '''
         this function will itterate through the user types in the data set, count the occurence of each variant and update the associate count variable
-        on each itteration until no more rows are availableself
+        on each itteration until no more rows are available.
+
         The function then returns the totals in a print statement
+        The returned data is for Counts of user types
         '''
-        print('There are {} subscribers, {} customers and {} empty or unknown values'.format(subscriber_count, customer_count, unkown_count))
+        print('User volumes are as follows:\n {} subscribers, \n {} customers \n {} empty or unknown values\n'.format(subscriber_count, customer_count, unkown_count))
     except KeyError:
-        print('No user type data')
+        print('No user type data has been returned')
     print()
     '''
     In the event 'User type' does not exist, the try statement will pass an exception and a message will be printed
     to the user that no user type data exists
     '''
-
-    # Display counts of gender
 
     try:
         genders = df['Gender']
@@ -265,14 +293,15 @@ def user_stats(df):
                 female_count += 1
             elif gender not in ("Male", "Female"):
                 unkown_count += 1
-        print('There are {} males, {} females and {} empty or unknown gender values'.format(male_count, female_count, unkown_gender_count))
+        print('Male vs. Female gender counts are as follows: \n {} males, \n {} females \n {} empty or unknown gender values\n'.format(male_count, female_count, unkown_gender_count))
         '''
         this function will itterate through the user types in the data set, count the occurence of each variant and update the associate count variable
         on each itteration until no more rows are available
-        The function then returns the totals in a print statement
+        The function then returns the totals in a print statements
+        The returned data is for Gender values
         '''
     except KeyError:
-        print('No gender data')
+        print('No gender data was returned')
         '''
         In the event 'Gender' does not exist, the try statement will pass an exception and a message will be printed
         to the user that no gender data exists
@@ -280,16 +309,15 @@ def user_stats(df):
     print()
     # Display earliest, most recent, and most common year of birth
 
-    #birth_year = df["Birth Year"]
     try:
         earliest = df["Birth Year"].min()
         most_recent = df["Birth Year"].max()
         most_common = df["Birth Year"].mode()[0]
-        print('The earliest birth year is {}'.format(earliest))
+        print('The earliest birth year is: \n {}'.format(earliest))
         print()
-        print('The most recent birth year is {}'.format(most_recent))
+        print('The most recent birth year is: \n {}'.format(most_recent))
         print()
-        print('The most common birth year is {}'.format(most_common))
+        print('The most common birth year is: \n {}'.format(most_common))
         print()
         print("\nThis took %s seconds." % (time.time() - start_time))
         print('-'*40)
@@ -297,7 +325,7 @@ def user_stats(df):
         The function will find the min, max and mode of birth related data and return them in print statements
         '''
     except KeyError:
-        print('No Birth Data')
+        print('No Birth Data returned')
         '''
         If not birth data exists, the try statement will use a keyerror to return a "no birth data" result
         '''
@@ -343,7 +371,6 @@ def main():
                 selectstats(df)
             else:
                 break
-        #restart_stats(df)
         see_raw(df)
         run_descr(df)
 
