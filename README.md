@@ -28,7 +28,7 @@ Files used in the project inlude:
 
 The following references are noted:
 
-####Articles/Content:
+#### Articles/Content
 
 https://stackoverflow.com/questions/21082671/find-and-select-the-most-frequent-data-of-column-in-pandas-dataframe
 
@@ -50,7 +50,7 @@ https://jeffdelaney.me/blog/useful-snippets-in-pandas/
 
 https://codereview.stackexchange.com/questions/167274/sum-array-values-based-on-conditions-in-other-arrays
 
-####Video:
+#### Video
 
 https://www.youtube.com/watch?v=6TEGxJXLAWQ
 
@@ -61,12 +61,12 @@ https://www.youtube.com/watch?v=NIWwJbo-9_8
 https://www.youtube.com/watch?v=eirjjyP2qcQ
 
 
-####Examples:
+#### Examples
 
 https://www.kaggle.com/datasets
 https://www.kaggle.com/samratp/bike-share-analysis
 
-####Trello Course Board:
+#### Trello Course Board
 
 Troll board of extensive referenced sources from the entire Programming for data science course
 https://trello.com/b/mErgsV7h/pythonresources
