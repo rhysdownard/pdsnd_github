@@ -1,9 +1,18 @@
 ### Date created
 28/11/2018
 
-### Bikeshare Python Prjoject
+### Bikeshare Python Project
 #### Programming for Data Science
 
+### Project sections
+
+1. Description
+2. Files used
+3. [Credits](#Credits)
+   1. Articles/Content
+   2. Video
+   3. Example code
+   4. Course Trello board
 
 ### Description
 The Python Bikeshare project is made for the interrogation of Bikeshare data for the purpose of
@@ -15,16 +24,16 @@ The program reviews data from 3 data files formatted as CSV. These are:
 3. Chicago data
 
 ### Files used
-Files used in the project inlude:
-1. bikeshare python program files
+Files used in the project include:
+1. Bikeshare python program files
 2. CSV data files
-  1. New York City data
-  2. Washington Data
-  3. Chicago Data
+   1. New York City data
+   2. Washington Data
+   3. Chicago Data
 3. README.md file for documentation
 4. readme.txt file with references  
 
-### Credits
+### <a name="#Credits">Credits</a>
 
 The following references are noted:
 
