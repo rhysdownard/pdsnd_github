@@ -1,7 +1,6 @@
 import time
-import pandas as pd
 import math
-
+import pandas as pd
 
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
@@ -99,7 +98,7 @@ def load_data(city, month, day):
 
 def selectstats(df):
     while True:
-        filter_stats = input('How would you like to filter:\n 1 - Time Stats\n 2 - User Stats\n 3 - Station Stats\n 4 - All Stats\n' )
+        filter_stats = input('How would you like to filter:\n 1 - Time Stats\n 2 - User Stats\n 3 - Station Stats\n 4 - Trip Duration Stats \n 5 - All Stats\n' )
         #for stat in filter_stats:
         if filter_stats == '1':
             return time_stats(df)
@@ -108,8 +107,10 @@ def selectstats(df):
         if filter_stats == '3':
             return station_stats(df)
         if filter_stats == '4':
+            return trip_duration_stats(df)
+        if filter_stats == '5':
             return time_stats(df), user_stats(df), station_stats(df)
-        if filter_stats != '1' or '2' or '3' or '4':
+        if filter_stats != '1' or '2' or '3' or '4' or '5':
             print('That is not a valid input. Please try again')
 
 
@@ -189,17 +190,21 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     # display total travel time
+
     total_trip = df['Trip Duration'].sum()
     hours = int(math.floor(total_trip / 3600))
     minutes = int(math.floor(total_trip % 60))
+
+    print('The total trip travel time has been: \n {} hours and {} minutes:'.format(hours, minutes))
+    print()
+
+
     '''
     calculates the sum of time per city as total seconds
     divides the seconds by 3600 to get hours
     returns the remainder of the seconds in minutes using the modulo function
     an alternate for hours could be integer division
     '''
-    print('The total trip travel time has been: \n {} hours and {} minutes:'.format(hours, minutes))
-    print()
 
     # display mean travel time
     mean_trip = df["Trip Duration"].mean()
@@ -218,12 +223,13 @@ def trip_duration_stats(df):
 
 
 def user_stats(df):
-    """Displays statistics on bikeshare users."""
+    """
+    Displays statistics on bikeshare users.
+    """
 
     print('\nCalculating User Stats...\n')
     start_time = time.time()
 
-    # Display counts of user types
     try:
         users = df['User Type']
         subscriber_count = 0
@@ -239,8 +245,10 @@ def user_stats(df):
                 unkown_count += 1
         '''
         this function will itterate through the user types in the data set, count the occurence of each variant and update the associate count variable
-        on each itteration until no more rows are availableself
+        on each itteration until no more rows are available.
+
         The function then returns the totals in a print statement
+        The returned data is for Counts of user types
         '''
         print('User volumes are as follows:\n {} subscribers, \n {} customers \n {} empty or unknown values\n'.format(subscriber_count, customer_count, unkown_count))
     except KeyError:
@@ -250,8 +258,6 @@ def user_stats(df):
     In the event 'User type' does not exist, the try statement will pass an exception and a message will be printed
     to the user that no user type data exists
     '''
-
-    # Display counts of gender
 
     try:
         genders = df['Gender']
@@ -269,7 +275,8 @@ def user_stats(df):
         '''
         this function will itterate through the user types in the data set, count the occurence of each variant and update the associate count variable
         on each itteration until no more rows are available
-        The function then returns the totals in a print statement
+        The function then returns the totals in a print statements
+        The returned data is for Gender values
         '''
     except KeyError:
         print('No gender data was returned')
@@ -280,7 +287,6 @@ def user_stats(df):
     print()
     # Display earliest, most recent, and most common year of birth
 
-    #birth_year = df["Birth Year"]
     try:
         earliest = df["Birth Year"].min()
         most_recent = df["Birth Year"].max()
@@ -343,7 +349,6 @@ def main():
                 selectstats(df)
             else:
                 break
-        #restart_stats(df)
         see_raw(df)
         run_descr(df)
 
