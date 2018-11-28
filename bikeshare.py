@@ -192,14 +192,36 @@ def trip_duration_stats(df):
     # display total travel time
 
     total_trip = df['Trip Duration'].sum()
+
+    minutes = int(math.floor(total_trip / 60))
+    hours = int(math.floor(total_trip / 3600))
+    days_calc = int(math.floor(total_trip / 86400))
+    years = int(math.floor(total_trip / 31536000))
+    print('Trip Duration breakdown is as follows:\n')
+    print('Minutes {}:'.format(minutes))
+    print('Hours {}:'.format(hours))
+    print('Days {}:'.format(days_calc))
+    print('Years {}:'.format(years))
+
+    def TimeConvert(num):
+        hours = int(math.floor(num / 3600))
+        minutes = num % 60
+
+      # combine the hours and minutes
+
+        return str(hours) + ':' + str(minutes)
+    print('The total trip was:')
+    print(TimeConvert(total_trip))
+
+
+    '''
+    total_trip = df['Trip Duration'].sum()
     hours = int(math.floor(total_trip / 3600))
     minutes = int(math.floor(total_trip % 60))
 
     print('The total trip travel time has been: \n {} hours and {} minutes:'.format(hours, minutes))
     print()
 
-
-    '''
     calculates the sum of time per city as total seconds
     divides the seconds by 3600 to get hours
     returns the remainder of the seconds in minutes using the modulo function
